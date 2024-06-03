@@ -1,50 +1,46 @@
 import { useEffect, useState } from 'react';
 import './App.css'
-import Modal from './components/Modal/Modal';
-import { Link, RouterProvider, createBrowserRouter, useNavigate } from 'react-router-dom';
+import { Link, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Details from './Details';
 
+const Home = () => {
+  return (
+    <div>
+      Hello world!
+      <Link to="/thisid">Click</Link>
+    </div>
+  );
+};
 
-function App() {
+const App = () => {
+  const [isOpen] = useState(true);
 
-const [isOpen, setIsOpen] = useState(true);
-const [myState, setMyState] = useState(false)
+  useEffect(() => {
+    console.log("Runs once on the initial render");
+  }, []);
 
-const handleOpenModal = () => {
-  setIsOpen(true);
-}
-// 1. ერთხელ
-useEffect(()=>{
-  console.log("გაეშვება ერთხელ პირველ რენდერზე")
-},[])
-// 2. დეფენდენსი არაიში არსებული სტეიტების ცვლილებაზე
-useEffect(()=>{
-  console.log("გაეშვება პირველ რენდერზე და შემდეგ isOpen ის ყოველ ცვლილებაზე")
-},[isOpen])
-// 3. ყოველ ცვლილებაზე
-useEffect(()=>{
-  // რენდერი ხდება ყოველი სტეიტის ცვლილებისას. მაგალითად თუ შეიცვალა isOpen, ან myState, ანუ გაეშვება ყველა სტეიტის ცვლილებაზე
-  console.log("გაეშვება ყოველ რენდერზე")
-})
+  useEffect(() => {
+    console.log("Runs on the initial render and whenever 'isOpen' changes");
+  }, [isOpen]);
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <div>Hello world!</div>,
-  },
-  {
-    path: "/:id",
-    element: <Details/>
-  }
-]);
+  useEffect(() => {
+    console.log("Runs on every render");
+  });
 
-  return (<>
-     <div>
-     <RouterProvider router={router} />
-     <Link to={'/thisid'}>click</Link>
-     </div>
-     </>
-  )
-}
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/:id",
+      element: <Details />,
+    }
+  ]);
 
-export default App
+  return (
+    <RouterProvider router={router} />
+  );
+};
+
+export default App;
